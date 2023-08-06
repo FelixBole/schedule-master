@@ -1,6 +1,6 @@
 {
 	"name": "com.slax.schedulemaster",
-	"version": "0.1.2",
+	"version": "0.2.0",
 	"displayName": "Schedule Master",
 	"description": "A Time Manager & Schedule Event Manager",
 	"unity": "2021.3",
@@ -22,7 +22,7 @@
 		{
 			"displayName": "Demo assets",
 			"description": "Sample Scene, Prefabs and Schedule Events configuration",
-			"path": "Samples/DemoConcent"
+			"path": "Samples/DemoContent"
 		}
 	]
 }

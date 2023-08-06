@@ -54,5 +54,6 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+Plugins/**/*
 TextMesh Pro/
 TestMesh Pro.meta
