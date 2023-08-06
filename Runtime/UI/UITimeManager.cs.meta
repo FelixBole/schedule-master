@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: e644fc397ab30294e9c3e9627a7dccd0
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - _timeText: {instanceID: 0}
+  - _dateText: {instanceID: 0}
+  - _yearText: {instanceID: 0}
+  - _timeOfDayImage: {instanceID: 0}
+  - _morningSprite: {fileID: 21300000, guid: dfa2cc49acce293448c0ac3eb0ad971d, type: 3}
+  - _afternoonSprite: {fileID: 21300000, guid: 59868593b038ce74abecdda5231ecab9, type: 3}
+  - _nightSprite: {fileID: 21300000, guid: abeef554f100341408817a3a5925ec0c, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

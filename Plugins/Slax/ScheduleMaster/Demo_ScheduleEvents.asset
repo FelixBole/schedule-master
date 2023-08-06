@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 269a90445f2821e49abc0a964f39cd3a, type: 3}
+  m_Name: Demo_ScheduleEvents
+  m_EditorClassIdentifier: 
+  _events:
+  - Name: Move the heart to the left
+    ID: 1
+    AllSeasons: 1
+    SkipSpring: 0
+    SkipSummer: 0
+    SkipAutumn: 0
+    SkipWinter: 0
+    Type: 0
+    Frequency: 0
+    Timestamp:
+      Day: 0
+      Date: 4
+      Hour: 7
+      Minutes: 0
+      Year: 1
+      Season: 0
+    IgnoreEndsAt: 1
+    EndsAt:
+      Day: 0
+      Date: 1
+      Hour: 0
+      Minutes: 0
+      Year: 0
+      Season: 0
+  - Name: Move the star to the right
+    ID: 2
+    AllSeasons: 1
+    SkipSpring: 0
+    SkipSummer: 0
+    SkipAutumn: 0
+    SkipWinter: 0
+    Type: 0
+    Frequency: 0
+    Timestamp:
+      Day: 0
+      Date: 4
+      Hour: 8
+      Minutes: 0
+      Year: 1
+      Season: 0
+    IgnoreEndsAt: 1
+    EndsAt:
+      Day: 0
+      Date: 1
+      Hour: 0
+      Minutes: 0
+      Year: 0
+      Season: 0
+  - Name: Move the tear down
+    ID: 3
+    AllSeasons: 0
+    SkipSpring: 0
+    SkipSummer: 0
+    SkipAutumn: 0
+    SkipWinter: 0
+    Type: 0
+    Frequency: 4
+    Timestamp:
+      Day: 0
+      Date: 4
+      Hour: 10
+      Minutes: 0
+      Year: 1
+      Season: 0
+    IgnoreEndsAt: 1
+    EndsAt:
+      Day: 0
+      Date: 1
+      Hour: 0
+      Minutes: 0
+      Year: 0
+      Season: 0
+  DefaultFilePath: Assets/demo_schedule_events.json
