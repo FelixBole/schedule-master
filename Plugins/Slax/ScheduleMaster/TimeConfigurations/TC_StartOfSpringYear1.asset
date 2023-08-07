@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08d1df00ffe7d11479656e705edd8b08, type: 3}
+  m_Name: TC_StartOfSpringYear1
+  m_EditorClassIdentifier: 
+  _notes: 'Starts at 5 AM on Spring Year 1 Day 1. Very first day.
+
+    10 minutes
+    per tick'
+  _season: 0
+  _maxYears: 99
+  _year: 1
+  _date: 1
+  _hour: 5
+  _minutes: 3
+  _dayConfiguration:
+    MorningStartHour: 6
+    AfternoonStartHour: 12
+    NightStartHour: 19
+  _tickMinutesIncrease: 10
+  _timeBetweenTicks: 1

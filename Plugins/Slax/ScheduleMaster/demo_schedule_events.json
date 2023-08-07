@@ -1,0 +1,86 @@
+[
+  {
+    "Name": "Move the heart to the left",
+    "ID": "1",
+    "AllSeasons": true,
+    "SkipSpring": false,
+    "SkipSummer": false,
+    "SkipAutumn": false,
+    "SkipWinter": false,
+    "Type": 0,
+    "Frequency": 0,
+    "Timestamp": {
+      "Day": 0,
+      "Date": 4,
+      "Hour": 7,
+      "Minutes": 0,
+      "Year": 1,
+      "Season": 0
+    },
+    "IgnoreEndsAt": true,
+    "EndsAt": {
+      "Day": 0,
+      "Date": 1,
+      "Hour": 0,
+      "Minutes": 0,
+      "Year": 0,
+      "Season": 0
+    }
+  },
+  {
+    "Name": "Move the star to the right",
+    "ID": "2",
+    "AllSeasons": true,
+    "SkipSpring": false,
+    "SkipSummer": false,
+    "SkipAutumn": false,
+    "SkipWinter": false,
+    "Type": 0,
+    "Frequency": 0,
+    "Timestamp": {
+      "Day": 0,
+      "Date": 4,
+      "Hour": 8,
+      "Minutes": 0,
+      "Year": 1,
+      "Season": 0
+    },
+    "IgnoreEndsAt": true,
+    "EndsAt": {
+      "Day": 0,
+      "Date": 1,
+      "Hour": 0,
+      "Minutes": 0,
+      "Year": 0,
+      "Season": 0
+    }
+  },
+  {
+    "Name": "Move the tear down",
+    "ID": "3",
+    "AllSeasons": false,
+    "SkipSpring": false,
+    "SkipSummer": false,
+    "SkipAutumn": false,
+    "SkipWinter": false,
+    "Type": 0,
+    "Frequency": 4,
+    "Timestamp": {
+      "Day": 0,
+      "Date": 4,
+      "Hour": 10,
+      "Minutes": 0,
+      "Year": 1,
+      "Season": 0
+    },
+    "IgnoreEndsAt": true,
+    "EndsAt": {
+      "Day": 0,
+      "Date": 1,
+      "Hour": 0,
+      "Minutes": 0,
+      "Year": 0,
+      "Season": 0
+    }
+  }
+]
