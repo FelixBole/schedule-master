@@ -1,6 +1,6 @@
 {
 	"name": "com.slax.schedulemaster",
-	"version": "0.2.3",
+	"version": "0.2.4",
 	"displayName": "Schedule Master",
 	"description": "A Time Manager & Schedule Event Manager",
 	"unity": "2021.3",
@@ -28,11 +28,11 @@
 		"Samples/**",
 		"Samples.meta",
 		"CHANGELOG.md",
-		"CHANGELOG.meta",
+		"CHANGELOG.md.meta",
 		"LICENSE.md",
-		"LICENSE.meta",
+		"LICENSE.md.meta",
 		"README.md",
-		"README.meta"
+		"README.md.meta"
 	],
 	"samples": [
 		{
