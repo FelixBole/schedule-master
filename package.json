@@ -32,7 +32,8 @@
 		"LICENSE.md",
 		"LICENSE.md.meta",
 		"README.md",
-		"README.md.meta"
+		"README.md.meta",
+		"package.json.meta"
 	],
 	"samples": [
 		{
