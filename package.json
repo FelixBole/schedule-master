@@ -1,6 +1,6 @@
 {
 	"name": "com.slax.schedulemaster",
-	"version": "0.2.1",
+	"version": "0.2.2",
 	"displayName": "Schedule Master",
 	"description": "A Time Manager & Schedule Event Manager",
 	"unity": "2021.3",
@@ -18,6 +18,15 @@
 	"dependencies": {
 		"com.unity.textmeshpro": "^3.0.6"
 	},
+	"files": [
+		"Documentation/**",
+		"Editor/**",
+		"Runtime/**",
+		"Samples/**",
+		"CHANGELOG.md",
+		"LICENSE.md",
+		"README.md"
+	],
 	"samples": [
 		{
 			"displayName": "Demo assets",
