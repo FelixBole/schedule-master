@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 119e7fc7b6a590643bd184b7bc8d0f2a, type: 3}
+  m_Name: ScheduleMasterEditorConfiguration
+  m_EditorClassIdentifier: 
+  EyeOpened: {fileID: 2800000, guid: 18f9c486d2b489449a7923eb2530399b, type: 3}
+  EyeClosed: {fileID: 2800000, guid: f7bc87c0da9b3df40926e86752fa67db, type: 3}
+  Cog: {fileID: 2800000, guid: 18aa3cdc7c991844b9824f7dd232eab9, type: 3}

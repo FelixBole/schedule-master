@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bd7aa29b1953f342a37d5a028d2938f, type: 3}
+  m_Name: Demo_EventChecks
+  m_EditorClassIdentifier: 
+  ScheduleEvents: {fileID: 11400000, guid: 0e2eb9705b51f494fbafb8d2780c85e3, type: 2}
+  Associations:
+  - Event:
+      Name: Move the heart to the left
+      ID: 1
+      AllSeasons: 1
+      SkipSpring: 0
+      SkipSummer: 0
+      SkipAutumn: 0
+      SkipWinter: 0
+      Type: 0
+      Frequency: 0
+      Timestamp:
+        Day: 0
+        Date: 4
+        Hour: 7
+        Minutes: 0
+        Year: 1
+        Season: 0
+      IgnoreEndsAt: 1
+      EndsAt:
+        Day: 0
+        Date: 1
+        Hour: 0
+        Minutes: 0
+        Year: 0
+        Season: 0
+    Checkers:
+    - {fileID: 11400000, guid: a850aa6e135fe4a4290dd09d0898e601, type: 2}
+    - {fileID: 11400000, guid: 5ae3d9004486f5f44be80f94e03d99c4, type: 2}
+  - Event:
+      Name: Move the star to the right
+      ID: 2
+      AllSeasons: 1
+      SkipSpring: 0
+      SkipSummer: 0
+      SkipAutumn: 0
+      SkipWinter: 0
+      Type: 0
+      Frequency: 0
+      Timestamp:
+        Day: 0
+        Date: 4
+        Hour: 8
+        Minutes: 0
+        Year: 1
+        Season: 0
+      IgnoreEndsAt: 1
+      EndsAt:
+        Day: 0
+        Date: 1
+        Hour: 0
+        Minutes: 0
+        Year: 0
+        Season: 0
+    Checkers: []

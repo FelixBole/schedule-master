@@ -18,6 +18,10 @@ namespace Slax.Schedule
         private int _minutes = 0;
         private DayConfiguration _dayConfiguration;
 
+        public static event UnityAction<DateTime> OnAwake;
+        public static event UnityAction<DateTime> OnNewDay;
+        public static event UnityAction<DateTime> OnNewSeason;
+        public static event UnityAction<DateTime> OnNewYear;
         public static event UnityAction<DateTime> OnDateTimeChanged;
         /// <summary>Fired if there is time between ticks, can be useful</summary>
         public static event UnityAction OnInBetweenTickFired;
@@ -60,8 +64,11 @@ namespace Slax.Schedule
 
         void Tick()
         {
-            _dateTime.AdvanceMinutes(_tickMinutesIncrease);
+            AdvanceTimeStatus status = _dateTime.AdvanceMinutes(_tickMinutesIncrease);
             OnDateTimeChanged?.Invoke(_dateTime);
+            if (status.AdvancedDay) OnNewDay?.Invoke(_dateTime);
+            if (status.AdvancedSeason) OnNewSeason?.Invoke(_dateTime);
+            if (status.AdvancedYear) OnNewYear?.Invoke(_dateTime);
         }
 
         void Setup()
@@ -83,7 +90,8 @@ namespace Slax.Schedule
 
             // We Invoke here so that other scripts can setup during awake with
             // the starting DateTime
-            OnDateTimeChanged.Invoke(_dateTime);
+            OnAwake?.Invoke(_dateTime);
+            OnDateTimeChanged?.Invoke(_dateTime);
         }
     }
 }

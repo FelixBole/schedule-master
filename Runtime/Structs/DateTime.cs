@@ -66,35 +66,40 @@ namespace Slax.Schedule
         /// <summary>
         /// Advances the time by a certain amount of minutes
         /// </summary>
-        public void AdvanceMinutes(int minutes)
+        public AdvanceTimeStatus AdvanceMinutes(int minutes)
         {
+            AdvanceTimeStatus status = new AdvanceTimeStatus();
             if (_minutes + minutes >= 60)
             {
                 _minutes = (_minutes + minutes) % 60;
-                AdvanceHour();
+                return AdvanceHour(status);
             }
             else _minutes += minutes;
+            status.AdvancedMinutes = true;
+            return status;
         }
 
         /// <summary>
         /// Called when the advance minutes notices
         /// a change in hour is needed
         /// </summary>
-        private void AdvanceHour()
+        private AdvanceTimeStatus AdvanceHour(AdvanceTimeStatus status)
         {
             if ((_hour + 1) == 24)
             {
                 _hour = 0;
-                AdvanceDay();
+                return AdvanceDay(status);
             }
             else _hour++;
+            status.AdvancedHour = true;
+            return status;
         }
 
         /// <summary>
         /// Called when the advance hour notices
         /// a change in day is needed
         /// </summary>
-        private void AdvanceDay()
+        private AdvanceTimeStatus AdvanceDay(AdvanceTimeStatus status)
         {
             if (_day + 1 > (Days)7)
             {
@@ -107,35 +112,41 @@ namespace Slax.Schedule
 
             if (_date % 29 == 0)
             {
-                AdvanceSeason();
                 _date = 1;
+                return AdvanceSeason(status);
             }
 
             _totalNumDays++;
+            status.AdvancedDay = true;
+            return status;
         }
 
         /// <summary>
         /// Called when the advance Day notices
         /// a change in seasons is needed
         /// </summary>
-        private void AdvanceSeason()
+        private AdvanceTimeStatus AdvanceSeason(AdvanceTimeStatus status)
         {
             if (_season == Season.Winter)
             {
                 _season = Season.Spring;
-                AdvanceYear();
+                return AdvanceYear(status);
             }
             else _season++;
+            status.AdvancedSeason = true;
+            return status;
         }
 
         /// <summary>
         /// Called when Advance season notices
         /// a change in year is needed
         /// </summary>
-        private void AdvanceYear()
+        private AdvanceTimeStatus AdvanceYear(AdvanceTimeStatus status)
         {
             _date = 1;
             _year++;
+            status.AdvancedYear = true;
+            return status;
         }
         #endregion
 
@@ -230,5 +241,23 @@ namespace Slax.Schedule
         Summer = 1,
         Autumn = 2,
         Winter = 3
+    }
+
+    public class AdvanceTimeStatus
+    {
+        public bool AdvancedMinutes;
+        public bool AdvancedHour;
+        public bool AdvancedDay;
+        public bool AdvancedSeason;
+        public bool AdvancedYear;
+
+        public AdvanceTimeStatus()
+        {
+            AdvancedMinutes = false;
+            AdvancedHour = false;
+            AdvancedDay = false;
+            AdvancedSeason = false;
+            AdvancedYear = false;
+        }
     }
 }

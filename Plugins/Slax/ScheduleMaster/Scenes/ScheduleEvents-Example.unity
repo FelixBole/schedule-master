@@ -438,6 +438,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86c50e014f102884ca908b941d22cf93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UseInBetweenTicks: 0
+  OnInBetweenTick:
+    m_PersistentCalls:
+      m_Calls: []
   OnEventStarted:
     m_PersistentCalls:
       m_Calls:
@@ -1314,6 +1318,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ScheduleMasterManager
       objectReference: {fileID: 0}
+    - target: {fileID: 8041718926862940442, guid: ffbecfb6731bad5499deae045487ddd5, type: 3}
+      propertyPath: EventCheckAssociationData
+      value: 
+      objectReference: {fileID: 11400000, guid: c946e3173ea418747b211f5b9059fb4f, type: 2}
     - target: {fileID: 8630963623003720857, guid: ffbecfb6731bad5499deae045487ddd5, type: 3}
       propertyPath: m_RootOrder
       value: 1

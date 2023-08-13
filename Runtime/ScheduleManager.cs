@@ -18,6 +18,9 @@ namespace Slax.Schedule
         public bool HasInBetweenTickEvents = false;
         public static UnityAction OnInBetweenTickFired = delegate { };
 
+        [Header("Schedule Event Checks")]
+        public ScheduleEventCheckAssociationSO EventCheckAssociationData;
+
         protected override void OnEnable()
         {
             base.OnEnable();
@@ -38,6 +41,14 @@ namespace Slax.Schedule
             List<ScheduleEvent> eventsToStart = _scheduleEvents.GetEventsForTimestamp(date.GetTimestamp());
 
             if (eventsToStart.Count == 0) return;
+
+            // Run Checks on events
+            if (EventCheckAssociationData != null)
+            {
+                List<ScheduleEvent> checkedEvents = EventCheckAssociationData.RunChecksAndGetPassedEvents(eventsToStart);
+                OnScheduleEvents.Invoke(checkedEvents);
+                return;
+            }
 
             OnScheduleEvents.Invoke(eventsToStart);
         }

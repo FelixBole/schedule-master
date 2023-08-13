@@ -21,7 +21,7 @@ MonoBehaviour:
   _year: 1
   _date: 1
   _hour: 5
-  _minutes: 3
+  _minutes: 1
   _dayConfiguration:
     MorningStartHour: 6
     AfternoonStartHour: 12
