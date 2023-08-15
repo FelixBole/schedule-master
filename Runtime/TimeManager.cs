@@ -9,14 +9,15 @@ namespace Slax.Schedule
     /// </summary>
     public class TimeManager : MonoBehaviour
     {
-        [SerializeField] private TimeConfigurationSO _timeConfiguration;
-        private Season _season;
-        private int _maxYears = 99;
-        private int _year = 1;
-        private int _date = 0;
-        private int _hour = 0;
-        private int _minutes = 0;
-        private DayConfiguration _dayConfiguration;
+        [SerializeField] protected TimeConfigurationSO _timeConfiguration;
+        protected Season _season;
+        protected int _maxYears = 99;
+        protected int _year = 1;
+        protected int _date = 0;
+        protected int _hour = 0;
+        protected int _minutes = 0;
+        protected DayConfiguration _dayConfiguration;
+        protected bool _isPaused = true;
 
         public static event UnityAction<DateTime> OnAwake;
         public static event UnityAction<DateTime> OnNewDay;
@@ -25,19 +26,14 @@ namespace Slax.Schedule
         public static event UnityAction<DateTime> OnDateTimeChanged;
         /// <summary>Fired if there is time between ticks, can be useful</summary>
         public static event UnityAction OnInBetweenTickFired;
-        private DateTime _dateTime;
-        private int _tickMinutesIncrease = 10;
-        private float _timeBetweenTicks = 1f;
-        private float _currentTimeBetweenTicks = 0;
+        protected DateTime _dateTime;
+        protected int _tickMinutesIncrease = 10;
+        protected float _timeBetweenTicks = 1f;
+        protected float _currentTimeBetweenTicks = 0;
 
-        void Awake()
+        protected virtual void Update()
         {
-            Setup();
-            CreateDateTime();
-        }
-
-        void Update()
-        {
+            if (_isPaused) return;
             _currentTimeBetweenTicks += Time.deltaTime;
 
             if (_currentTimeBetweenTicks >= _timeBetweenTicks)
@@ -51,7 +47,23 @@ namespace Slax.Schedule
             }
         }
 
-        public void SetTime(Timestamp t)
+        public virtual void Initialize()
+        {
+            Setup();
+            CreateDateTime();
+        }
+
+        public virtual void Start()
+        {
+            _isPaused = false;
+        }
+
+        public virtual void Pause()
+        {
+            _isPaused = true;
+        }
+
+        public virtual void SetTime(Timestamp t)
         {
             _season = t.Season;
             _date = t.Date;
@@ -62,7 +74,7 @@ namespace Slax.Schedule
             CreateDateTime();
         }
 
-        void Tick()
+        protected virtual void Tick()
         {
             AdvanceTimeStatus status = _dateTime.AdvanceMinutes(_tickMinutesIncrease);
             OnDateTimeChanged?.Invoke(_dateTime);
@@ -71,7 +83,7 @@ namespace Slax.Schedule
             if (status.AdvancedYear) OnNewYear?.Invoke(_dateTime);
         }
 
-        void Setup()
+        protected virtual void Setup()
         {
             _season = _timeConfiguration.Season;
             _maxYears = _timeConfiguration.MaxYears;
@@ -84,7 +96,7 @@ namespace Slax.Schedule
             _timeBetweenTicks = _timeConfiguration.TimeBetweenTicks;
         }
 
-        private void CreateDateTime()
+        protected virtual void CreateDateTime()
         {
             _dateTime = new DateTime(_date, (int)_season, _year, _hour, _minutes * _tickMinutesIncrease, _dayConfiguration);
 

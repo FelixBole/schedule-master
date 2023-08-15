@@ -6,21 +6,21 @@ namespace Slax.Schedule
     public class ScheduleEventCheckIsParticularDaySO : ScheduleEventCheckBase
     {
         public Days Day;
-        private Days _currentDay;
+        protected Days _currentDay;
 
-        void OnEnable()
+        protected virtual void OnEnable()
         {
             TimeManager.OnAwake += SetCurrentDay;
             TimeManager.OnNewDay += SetCurrentDay;
         }
 
-        void OnDisable()
+        protected virtual void OnDisable()
         {
             TimeManager.OnAwake -= SetCurrentDay;
             TimeManager.OnNewDay -= SetCurrentDay;
         }
 
-        void SetCurrentDay(DateTime date)
+        protected virtual void SetCurrentDay(DateTime date)
         {
             _currentDay = date.Day;
         }

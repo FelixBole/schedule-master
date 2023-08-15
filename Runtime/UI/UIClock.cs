@@ -6,20 +6,20 @@ namespace Slax.Schedule
 {
     public class UIClock : MonoBehaviour
     {
-        [SerializeField] private Image _clockArrow;
-        [SerializeField] private TextMeshProUGUI _timeText;
+        [SerializeField] protected Image _clockArrow;
+        [SerializeField] protected TextMeshProUGUI _timeText;
 
-        public void OnEnable()
+        protected virtual void OnEnable()
         {
             TimeManager.OnDateTimeChanged += UpdateClock;
         }
 
-        public void OnDisable()
+        protected virtual void OnDisable()
         {
             TimeManager.OnDateTimeChanged -= UpdateClock;
         }
 
-        private void UpdateClock(DateTime date)
+        protected virtual void UpdateClock(DateTime date)
         {
             float hourProgress = (float)date.Hour / 24f;
             float rotationDegrees = 90f - (hourProgress * 180f);
