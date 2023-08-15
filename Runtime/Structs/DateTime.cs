@@ -40,6 +40,7 @@ namespace Slax.Schedule
         public int CurrentWeek => _totalNumWeeks % 16 == 0 ? 16 : _totalNumWeeks % 16;
 
         private DayConfiguration _dayConfiguration;
+        public DayConfiguration DayConfiguration => _dayConfiguration;
         #endregion
 
         public DateTime(int date, int season, int year, int hour, int minutes, DayConfiguration dayConfiguration)
