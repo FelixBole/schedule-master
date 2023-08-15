@@ -53,7 +53,7 @@ namespace Slax.Schedule
             CreateDateTime();
         }
 
-        public virtual void Start()
+        public virtual void Play()
         {
             _isPaused = false;
         }
@@ -61,6 +61,16 @@ namespace Slax.Schedule
         public virtual void Pause()
         {
             _isPaused = true;
+        }
+
+        public virtual void SetNewDay()
+        {
+            Pause();
+            AdvanceTimeStatus status = _dateTime.SetNewDay();
+            if (status.AdvancedDay) OnNewDay?.Invoke(_dateTime);
+            if (status.AdvancedSeason) OnNewSeason?.Invoke(_dateTime);
+            if (status.AdvancedYear) OnNewYear?.Invoke(_dateTime);
+            Play();
         }
 
         public virtual void SetTime(Timestamp t)

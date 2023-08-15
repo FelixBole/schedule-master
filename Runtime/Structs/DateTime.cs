@@ -64,6 +64,16 @@ namespace Slax.Schedule
         #region Time Advancement
 
         /// <summary>
+        /// Advances the time by a day and configures it to
+        /// the start of the morning from the day configuration
+        /// </summary>
+        public AdvanceTimeStatus SetNewDay()
+        {
+            _hour = _dayConfiguration.MorningStartHour;
+            return AdvanceDay(new AdvanceTimeStatus());
+        }
+
+        /// <summary>
         /// Advances the time by a certain amount of minutes
         /// </summary>
         public AdvanceTimeStatus AdvanceMinutes(int minutes)
