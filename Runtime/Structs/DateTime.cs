@@ -39,6 +39,10 @@ namespace Slax.Schedule
         /// <summary>Current week on a 4 seasons of 28 days basis</summary>
         public int CurrentWeek => _totalNumWeeks % 16 == 0 ? 16 : _totalNumWeeks % 16;
 
+        private float _currentDayProgress;
+        /// <summary>Progress of the day, ignoring day configuration so from 00:00 to 23:59</summary>
+        public float CurrentDayProgress => _currentDayProgress;
+
         private DayConfiguration _dayConfiguration;
         public DayConfiguration DayConfiguration => _dayConfiguration;
         #endregion
@@ -59,6 +63,9 @@ namespace Slax.Schedule
 
             _totalNumWeeks = 1 + _totalNumDays / 7;
 
+            int totalMinutesElapsed = (_hour * 60) + _minutes;
+            _currentDayProgress = (float)totalMinutesElapsed / 1440; // 1440 = 24 * 60 mins
+
             _dayConfiguration = dayConfiguration;
         }
 
@@ -71,6 +78,7 @@ namespace Slax.Schedule
         public AdvanceTimeStatus SetNewDay()
         {
             _hour = _dayConfiguration.MorningStartHour;
+            RecalculateCurrentDayProgress();
             return AdvanceDay(new AdvanceTimeStatus());
         }
 
@@ -87,6 +95,7 @@ namespace Slax.Schedule
             }
             else _minutes += minutes;
             status.AdvancedMinutes = true;
+            RecalculateCurrentDayProgress();
             return status;
         }
 
@@ -102,6 +111,7 @@ namespace Slax.Schedule
                 return AdvanceDay(status);
             }
             else _hour++;
+            RecalculateCurrentDayProgress();
             status.AdvancedHour = true;
             return status;
         }
@@ -129,6 +139,7 @@ namespace Slax.Schedule
 
             _totalNumDays++;
             status.AdvancedDay = true;
+            RecalculateCurrentDayProgress();
             return status;
         }
 
@@ -145,6 +156,7 @@ namespace Slax.Schedule
             }
             else _season++;
             status.AdvancedSeason = true;
+            RecalculateCurrentDayProgress();
             return status;
         }
 
@@ -157,8 +169,20 @@ namespace Slax.Schedule
             _date = 1;
             _year++;
             status.AdvancedYear = true;
+            RecalculateCurrentDayProgress();
             return status;
         }
+
+        /// <summary>
+        /// Recalculates the ratio of progression in the day between
+        /// midnight and 23.59. This is useful for light systems etc
+        /// </summary>
+        private void RecalculateCurrentDayProgress()
+        {
+            int totalMinutesElapsed = (_hour * 60) + _minutes;
+            _currentDayProgress = (float)totalMinutesElapsed / 1440; // 1440 = 24 * 60 mins
+        }
+
         #endregion
 
         #region Bool Checks
