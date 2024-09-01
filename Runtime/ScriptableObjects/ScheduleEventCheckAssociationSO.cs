@@ -74,7 +74,7 @@ namespace Slax.Schedule
             {
                 ScheduleEventCheckerAssociation association = Associations.Find(o => o.Event.ID == ev.ID);
 
-                if (association == null)
+                if (association == null || association.Checkers.Count == 0)
                 {
                     passed.Add(ev);
                     continue;
@@ -127,8 +127,8 @@ namespace Slax.Schedule
 
         public PassedCheck(ScheduleEvent ev, bool passed)
         {
-            this.Event = ev;
-            this.Passed = passed;
+            Event = ev;
+            Passed = passed;
         }
     }
 }

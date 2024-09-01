@@ -31,6 +31,16 @@ namespace Slax.Schedule
         protected float _timeBetweenTicks = 1f;
         protected float _currentTimeBetweenTicks = 0;
 
+        /// <summary>When set to true, the changes during runtime will be saved to the current _timeConfigurationSO</summary>
+        protected bool _usingExternalConfiguration = false;
+
+        public bool IsTestingMode => _timeConfiguration != null && !_usingExternalConfiguration;
+
+        protected virtual void Awake()
+        {
+            _usingExternalConfiguration = false;
+        }
+
         protected virtual void Update()
         {
             if (_isPaused) return;
@@ -53,6 +63,38 @@ namespace Slax.Schedule
             CreateDateTime();
         }
 
+        /// <summary>
+        /// This method is used to initialize the TimeManager with a TimeConfigurationSO.
+        /// This is the method that should be used in the real game, instead
+        /// of the Initialize method which is used for development & testing.
+        /// </summary>
+        public virtual void InitializeFromConfiguration(TimeConfigurationSO configuration)
+        {
+            _timeConfiguration = configuration;
+            _usingExternalConfiguration = true;
+            Setup();
+            CreateDateTime();
+        }
+
+        /// <summary>
+        /// This method is used to save the current time configuration to the TimeConfigurationSO
+        /// that is being used by the TimeManager. Usually used when the TimeManager was
+        /// initialized with a provided external TimeConfigurationSO.
+        /// </summary>
+        public virtual TimeConfigurationSO Save()
+        {
+            if (_usingExternalConfiguration)
+            {
+                _timeConfiguration.Setup(_dateTime.Season, _dateTime.Year, _dateTime.Date, _dateTime.Hour, _dateTime.Minutes, _timeConfiguration.DayConfiguration, _timeConfiguration.MaxYears, _timeConfiguration.TickMinutesIncrease, _timeConfiguration.TimeBetweenTicks);
+            }
+            else
+            {
+                Debug.LogWarning("TimeManager is not using an external TimeConfigurationSO, changes will not be saved in order to keep the configuration intact.");
+            }
+
+            return _timeConfiguration;
+        }
+
         public virtual void Play()
         {
             _isPaused = false;
@@ -73,6 +115,19 @@ namespace Slax.Schedule
             Play();
         }
 
+        public virtual Timestamp GetTime()
+        {
+            Timestamp t = new Timestamp
+            {
+                Season = _season,
+                Date = _date,
+                Year = _year,
+                Hour = _hour,
+                Minutes = _minutes
+            };
+            return t;
+        }
+
         public virtual void SetTime(Timestamp t)
         {
             _season = t.Season;
@@ -84,9 +139,32 @@ namespace Slax.Schedule
             CreateDateTime();
         }
 
+        /// <summary>
+        /// This method is used to change the speed of the time manager during runtime.
+        /// 1 is the default speed, to go faster, use a value lower than 1 as it represents
+        /// the time between ticks in seconds.
+        /// </summary>
+        public virtual void ChangeTimeSpeed(float speed)
+        {
+            _timeBetweenTicks = speed;
+        }
+
+        public virtual float GetTimeSpeed()
+        {
+            return _timeBetweenTicks;
+        }
+
+        public virtual void ResetTimeSpeed()
+        {
+            _timeBetweenTicks = _timeConfiguration.TimeBetweenTicks;
+        }
+
         protected virtual void Tick()
         {
             AdvanceTimeStatus status = _dateTime.AdvanceMinutes(_tickMinutesIncrease);
+
+            if (!IsTestingMode) Save();
+
             OnDateTimeChanged?.Invoke(_dateTime);
             if (status.AdvancedDay) OnNewDay?.Invoke(_dateTime);
             if (status.AdvancedSeason) OnNewSeason?.Invoke(_dateTime);

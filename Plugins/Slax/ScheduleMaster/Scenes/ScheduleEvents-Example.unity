@@ -988,6 +988,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TimeManager: {fileID: 1728463606}
+  GameTimeConfiguration: {fileID: 11400000, guid: a36347fb2203eeb4cafb5b742908b9ea, type: 2}
+  UseGameTimeConfiguration: 0
 --- !u!4 &1726982876
 Transform:
   m_ObjectHideFlags: 0
@@ -1395,6 +1397,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ScheduleMasterManager
       objectReference: {fileID: 0}
+    - target: {fileID: 4406600308900266324, guid: ffbecfb6731bad5499deae045487ddd5, type: 3}
+      propertyPath: _timeConfiguration
+      value: 
+      objectReference: {fileID: 11400000, guid: f2aeee5a9d1e6bf4a9e0fd39efd4f9e2, type: 2}
     - target: {fileID: 8041718926862940442, guid: ffbecfb6731bad5499deae045487ddd5, type: 3}
       propertyPath: EventCheckAssociationData
       value: 

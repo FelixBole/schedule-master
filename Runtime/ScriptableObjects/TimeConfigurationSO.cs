@@ -9,6 +9,7 @@ namespace Slax.Schedule
     /// assets instead of changing the configuration every time on the TimeManager
     /// </summary>
     [CreateAssetMenu(menuName = "Slax/ScheduleMaster/TimeConfiguration", fileName = "NewTimeConfiguration")]
+    [System.Serializable]
     public class TimeConfigurationSO : ScriptableObject
     {
         /// <summary>To keep track of what its for</summary>
@@ -34,5 +35,18 @@ namespace Slax.Schedule
         public int TickMinutesIncrease => _tickMinutesIncrease;
         [SerializeField] protected float _timeBetweenTicks = 1f;
         public float TimeBetweenTicks => _timeBetweenTicks;
+
+        public void Setup(Season season, int year, int date, int hour, int minutes, DayConfiguration dayConfiguration, int maxYears, int tickMinutesIncrease, float timeBetweenTicks)
+        {
+            _season = season;
+            _year = year;
+            _date = date;
+            _hour = hour;
+            _tickMinutesIncrease = tickMinutesIncrease;
+            _minutes = minutes / _tickMinutesIncrease;
+            _dayConfiguration = dayConfiguration;
+            _maxYears = maxYears;
+            _timeBetweenTicks = timeBetweenTicks;
+        }
     }
 }
