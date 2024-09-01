@@ -327,11 +327,14 @@ namespace Slax.Schedule
             if (_checkersInCreation.Count > 0)
             {
                 BV(true);
+                GUI.backgroundColor = Color.yellow;
                 Label("Unsaved checks (remember to save to validate)");
                 DrawRemovableChecks(ref _checkersInCreation);
+                GUI.backgroundColor = Color.white;
                 EV();
                 Space();
 
+                GUI.backgroundColor = Color.green;
                 if (GUILayout.Button("Save"))
                 {
                     if (_associationInCreation.Checkers == null)
@@ -351,9 +354,8 @@ namespace Slax.Schedule
                     _checkersInCreation = new List<ScheduleEventCheckBase>();
                     _attemptedToAssociateExisting = false;
                 }
-
+                GUI.backgroundColor = Color.white;
             }
-
         }
 
         private void DrawBrowseContent()
@@ -386,17 +388,21 @@ namespace Slax.Schedule
                     {
                         if (_eventDisplayingInformation != null && _eventDisplayingInformation.ID == ev.ID)
                         {
-                            if (GUILayout.Button(_editorConfig.EyeOpened, GUILayout.MaxWidth(35), GUILayout.MaxHeight(25)))
+                            GUI.backgroundColor = Color.blue;
+                            if (GUILayout.Button(_editorConfig.EyeClosed, GUILayout.MaxWidth(35), GUILayout.MaxHeight(25)))
                             {
                                 _eventDisplayingInformation = null;
                             }
+                            GUI.backgroundColor = Color.white;
                         }
                         else
                         {
-                            if (GUILayout.Button(_editorConfig.EyeClosed, GUILayout.MaxWidth(35), GUILayout.MaxHeight(25)))
+                            GUI.backgroundColor = Color.blue;
+                            if (GUILayout.Button(_editorConfig.EyeOpened, GUILayout.MaxWidth(35), GUILayout.MaxHeight(25)))
                             {
                                 _eventDisplayingInformation = ev;
                             }
+                            GUI.backgroundColor = Color.white;
                         }
 
                     }

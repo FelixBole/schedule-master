@@ -23,7 +23,7 @@ MonoBehaviour:
     Type: 0
     Frequency: 0
     Timestamp:
-      Day: 0
+      Day: 1
       Date: 4
       Hour: 7
       Minutes: 0
@@ -47,7 +47,7 @@ MonoBehaviour:
     Type: 0
     Frequency: 0
     Timestamp:
-      Day: 0
+      Day: 1
       Date: 4
       Hour: 8
       Minutes: 0
@@ -71,7 +71,7 @@ MonoBehaviour:
     Type: 0
     Frequency: 4
     Timestamp:
-      Day: 0
+      Day: 1
       Date: 4
       Hour: 10
       Minutes: 0
@@ -85,4 +85,5 @@ MonoBehaviour:
       Minutes: 0
       Year: 0
       Season: 0
+  _useInternalFileManagement: 1
   DefaultFilePath: Assets/Plugins/Slax/ScheduleMaster/demo_schedule_events.json

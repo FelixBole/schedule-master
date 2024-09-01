@@ -16,13 +16,28 @@ namespace Slax.Schedule
         private Dictionary<MonthlyTimestamp, List<ScheduleEvent>> _monthlyEventsDict;
         private Dictionary<AnnualTimestamp, List<ScheduleEvent>> _annualEventsDict;
 
+        [Header("Save / Load mechanism")]
+        [SerializeField][Tooltip("Setting this to false will allow you to manually set and get events without the use of the internal JSON file management and plug in your own solution.")] bool _useInternalFileManagement = true;
+
         [Header("Default JSON File Path")]
         [Tooltip("The default path for saving and loading the events as a JSON file.")]
         public string DefaultFilePath = "Assets/schedule_events.json";
 
         private void OnEnable()
         {
-            LoadEventsFromJson(DefaultFilePath);
+            if (_useInternalFileManagement)
+                LoadEventsFromJson(DefaultFilePath);
+        }
+
+        public void SetEventsManually(List<ScheduleEvent> events)
+        {
+            _events = events;
+            GenerateEventsDictionary();
+        }
+
+        public List<ScheduleEvent> GetEvents()
+        {
+            return _events;
         }
 
         public void SaveEventsToJson(string filePath)
@@ -219,6 +234,45 @@ namespace Slax.Schedule
             }
 
             return eventsToReturn;
+        }
+
+        /// <summary>
+        /// Retrieves a list of all the schedule events that are supposed to happen
+        /// in the selective timestamp provided, ignoring elements of the timestamp
+        /// that are not set to true.
+        /// </summary>
+        public List<ScheduleEvent> GetEventsBySelectiveTimestamp(Timestamp timestamp, bool searchByDay, bool searchByDate, bool searchByHour, bool searchByYear, bool searchBySeason)
+        {
+            List<ScheduleEvent> matchingEvents = new List<ScheduleEvent>();
+
+            foreach (var ev in Events)
+            {
+                bool match = true;
+                if (searchByDay && ev.Timestamp.Day != timestamp.Day) match = false;
+                if (searchByDate && ev.Timestamp.Date != timestamp.Date) match = false;
+                if (searchByHour && ev.Timestamp.Hour != timestamp.Hour) match = false;
+                if (searchByYear && ev.Timestamp.Year != timestamp.Year) match = false;
+                if (searchBySeason && ev.Timestamp.Season != timestamp.Season) match = false;
+
+                if (match) matchingEvents.Add(ev);
+            }
+
+            return matchingEvents;
+        }
+
+        public List<ScheduleEvent> GetEventsBetweenTimestamps(Timestamp start, Timestamp end)
+        {
+            List<ScheduleEvent> matchingEvents = new List<ScheduleEvent>();
+
+            foreach (var ev in Events)
+            {
+                if (ev.Timestamp.IsBetween(start, end))
+                {
+                    matchingEvents.Add(ev);
+                }
+            }
+
+            return matchingEvents;
         }
     }
 

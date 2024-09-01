@@ -35,7 +35,6 @@ namespace Slax.Schedule
             TimeManager.OnInBetweenTickFired -= FireInBetweenTick;
         }
 
-
         /// <summary>
         /// Goes through the events dictionaries and invokes events if
         /// some need to start

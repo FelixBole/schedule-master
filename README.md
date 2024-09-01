@@ -76,6 +76,17 @@ When creating this scriptable object asset, it will generate an initial JSON fil
 
 Once the asset is created, navigate to it in your project window and in the inspector you will be prompted to open the editor.
 
+#### Creating an event from the editor
+The Schedule Event Custom Editor allows you to easily create new events.
+When selecting the `Event Creation` tab, you'll end up on a view that allows for configuration of a new event that will be automatically be placed inside your JSON events file.
+
+In the following example screenshot, the setup enables the creation of an event with the name `Test` which is targeted to be used by an NPC on a Weekly basis.
+
+This event will start on Monday 15th of Spring on Year 2 at 12:00PM and happen every week until Monday 15th of Spring at 12:00PM of Year 5, with the particularity to skip every week in the season of Winter.
+
+If we wanted for this event to happen indefinitely, we could simply toggle the `This event has no end date` checkbox to ignore the end date entirely.
+![event creation](./Documentation/docs_event_creation.png)
+
 #### Moving the JSON file
 
 If you decide to manually move the JSON file, Unity will probably send an error as the ScheduleEvents asset will not be able to find the JSON file at the DefaultFilePath defined for it.

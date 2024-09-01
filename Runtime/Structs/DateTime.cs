@@ -256,7 +256,7 @@ namespace Slax.Schedule
     [System.Serializable]
     public enum Days
     {
-        NULL = 0,
+        Null = 0,
         Mon = 1,
         Tue = 2,
         Wed = 3,

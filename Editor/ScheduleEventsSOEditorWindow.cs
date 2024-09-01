@@ -12,7 +12,7 @@ namespace Slax.Schedule
         private ScheduleEvent newEvent = new ScheduleEvent();
 
         private string jsonFilePath;
-        private string searchId = "";
+        private string searchId = "*";
         private string errorMessage = "";
         private int currentTab = 0;
         private int nextAvailableID = 1;
@@ -21,10 +21,21 @@ namespace Slax.Schedule
         private Vector2 searchResultsScrollPosition;
 
         private bool showNoMatchingEventsMessage = false;
+        private bool searchOptionsFoldout = true;
         private bool unsavedChanges = false;
         private bool isAddEventButtonEnabled = false;
         private bool isSearchByTimestampPerformed = false;
         private bool successCreatedEvent = false;
+
+        private bool searchByDay = true;
+        private bool searchByDate = true;
+        private bool searchByHour = true;
+        private bool searchByYear = true;
+        private bool searchBySeason = true;
+        private bool searchBetweenTimestamps = false;
+
+        private Timestamp startTimestamp = new Timestamp(Days.Mon, 0, 0, 0, 0, Season.Spring);
+        private Timestamp endTimestamp = new Timestamp(Days.Mon, 0, 0, 0, 0, Season.Spring);
 
         private List<ScheduleEvent> searchByTimestampResults = new List<ScheduleEvent>();
 
@@ -147,12 +158,6 @@ namespace Slax.Schedule
 
         }
 
-        private void DrawHeader()
-        {
-            EditorGUILayout.LabelField("Schedule Events Editor", EditorStyles.boldLabel);
-            EditorGUILayout.Space();
-        }
-
         private void DrawSidebar()
         {
             string saveHover = unsavedChanges ? "Some changes are not saved to JSON file" : "Save events to JSON file";
@@ -267,7 +272,7 @@ namespace Slax.Schedule
                 bool hasMatchingEvent = false;
                 foreach (var ev in eventsSO.Events)
                 {
-                    if (ev.ID.Contains(searchId))
+                    if (ev.ID.Contains(searchId) || ev.Name.Contains(searchId) || searchId == "*")
                     {
                         hasMatchingEvent = true;
                         break;
@@ -286,58 +291,110 @@ namespace Slax.Schedule
             }
         }
 
+        private void DrawTimestampFields(ref Timestamp timestamp)
+        {
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+            GUI.backgroundColor = Color.blue;
+            EditorGUILayout.HelpBox("Set the timestamp information for which you want to search the events.", MessageType.Info);
+            GUI.backgroundColor = Color.white;
+            timestamp.Day = (Days)EditorGUILayout.EnumPopup("Day", timestamp.Day);
+            timestamp.Date = EditorGUILayout.IntSlider("Date", timestamp.Date, 0, 28);
+            timestamp.Hour = EditorGUILayout.IntSlider("Hour", timestamp.Hour, 0, 23);
+            timestamp.Minutes = EditorGUILayout.IntSlider("Minutes", timestamp.Minutes, 0, 59);
+            timestamp.Year = EditorGUILayout.IntField("Year", timestamp.Year);
+            timestamp.Season = (Season)EditorGUILayout.EnumPopup("Season", timestamp.Season);
+            EditorGUILayout.EndVertical();
+        }
+
         private void DrawTimestampSearchContent()
         {
             EditorGUILayout.LabelField("Search by Timestamp", EditorStyles.boldLabel);
 
-            // Draw the Timestamp fields
-            searchTimestamp.Day = (Days)EditorGUILayout.EnumPopup("Day", searchTimestamp.Day);
-            searchTimestamp.Date = EditorGUILayout.IntSlider("Date", searchTimestamp.Date, 0, 28);
-            searchTimestamp.Hour = EditorGUILayout.IntSlider("Hour", searchTimestamp.Hour, 0, 23);
-            searchTimestamp.Minutes = EditorGUILayout.IntSlider("Minutes", searchTimestamp.Minutes, 0, 59);
-            searchTimestamp.Year = EditorGUILayout.IntField("Year", searchTimestamp.Year);
-            searchTimestamp.Season = (Season)EditorGUILayout.EnumPopup("Season", searchTimestamp.Season);
+            GUI.backgroundColor = Color.magenta;
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+            searchOptionsFoldout = EditorGUILayout.Foldout(searchOptionsFoldout, "Search Options");
+            if (searchOptionsFoldout)
+            {
+                GUI.backgroundColor = Color.blue;
+                EditorGUILayout.HelpBox("Select the options to search by. For example, selecting only Year will search all events in that year ignoring all of the other attributes of the timestamp. You can also combine different search options.", MessageType.Info);
+                GUI.backgroundColor = Color.white;
+                searchByDay = EditorGUILayout.Toggle("Day", searchByDay);
+                searchByDate = EditorGUILayout.Toggle("Date", searchByDate);
+                searchByHour = EditorGUILayout.Toggle("Hour", searchByHour);
+                searchByYear = EditorGUILayout.Toggle("Year", searchByYear);
+                searchBySeason = EditorGUILayout.Toggle("Season", searchBySeason);
+                searchBetweenTimestamps = EditorGUILayout.Toggle("Search Between Timestamps", searchBetweenTimestamps);
+            }
+            EditorGUILayout.EndVertical();
+            GUI.backgroundColor = Color.white;
+
+            if (searchBetweenTimestamps)
+            {
+                // Draw the input for start and end timestamps
+                EditorGUILayout.Space();
+                EditorGUILayout.LabelField("Start Timestamp");
+                DrawTimestampFields(ref startTimestamp);
+
+                EditorGUILayout.Space();
+                EditorGUILayout.LabelField("End Timestamp");
+                DrawTimestampFields(ref endTimestamp);
+            }
+            else
+            {
+                // Draw the Timestamp fields for normal search
+                DrawTimestampFields(ref searchTimestamp);
+            }
 
             if (GUILayout.Button("Search"))
             {
-                searchByTimestampResults = eventsSO.GetEventsForTimestamp(searchTimestamp);
-                isSearchByTimestampPerformed = true;
-            }
-
-            if (isSearchByTimestampPerformed)
-            {
-                // Display the matching events in the editor window
-                GUILayout.Space(10);
-                EditorGUILayout.LabelField("Matching Events", EditorStyles.boldLabel);
-
-                searchResultsScrollPosition = EditorGUILayout.BeginScrollView(searchResultsScrollPosition);
-
-                if (searchByTimestampResults.Count > 0)
+                if (searchBetweenTimestamps)
                 {
-                    foreach (var ev in searchByTimestampResults)
-                    {
-                        if (!ev.IsValid(searchTimestamp)) continue;
-                        EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-                        EditorGUILayout.LabelField($"Event Name: {ev.Name}");
-                        EditorGUILayout.LabelField($"Event ID: {ev.ID}");
-                        EditorGUILayout.LabelField($"Type: {ev.Type}");
-                        EditorGUILayout.LabelField($"Frequency: {ev.Frequency}");
-                        EditorGUILayout.LabelField($"Timestamp: {ev.Timestamp.Day} {ev.Timestamp.Date}/{ev.Timestamp.Season}/{ev.Timestamp.Year} - {ev.Timestamp.Hour}:{ev.Timestamp.Minutes}");
-                        if (!ev.IgnoreEndsAt)
-                        {
-                            EditorGUILayout.LabelField($"Ends At: {ev.Timestamp.Day} {ev.Timestamp.Date}/{ev.Timestamp.Season}/{ev.Timestamp.Year} - {ev.Timestamp.Hour}:{ev.Timestamp.Minutes}");
-                        }
-                        EditorGUILayout.EndVertical();
-                        GUILayout.Space(5);
-                    }
+                    searchByTimestampResults = eventsSO.GetEventsBetweenTimestamps(startTimestamp, endTimestamp);
                 }
                 else
                 {
-                    EditorGUILayout.HelpBox("No events found for the selected Timestamp.", MessageType.Info);
+                    searchByTimestampResults = eventsSO.GetEventsBySelectiveTimestamp(
+                        searchTimestamp, searchByDay, searchByDate, searchByHour, searchByYear, searchBySeason
+                    );
                 }
-
-                EditorGUILayout.EndScrollView();
+                isSearchByTimestampPerformed = true;
             }
+
+            DrawSearchByTimestampResults();
+        }
+
+        private void DrawSearchByTimestampResults()
+        {
+            if (!isSearchByTimestampPerformed) return;
+
+            GUILayout.Space(10);
+            EditorGUILayout.LabelField("Matching Events", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField($"{searchByTimestampResults.Count} events found.");
+
+            searchResultsScrollPosition = EditorGUILayout.BeginScrollView(searchResultsScrollPosition, GUILayout.MinHeight(400));
+
+            if (searchByTimestampResults.Count > 0)
+            {
+                foreach (var ev in searchByTimestampResults)
+                {
+                    EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+                    EditorGUILayout.LabelField($"Event Name: {ev.Name}");
+                    EditorGUILayout.LabelField($"Event ID: {ev.ID}");
+                    EditorGUILayout.LabelField($"Type: {ev.Type}");
+                    EditorGUILayout.LabelField($"Frequency: {ev.Frequency}");
+                    EditorGUILayout.LabelField($"Timestamp: {ev.Timestamp.Day} {ev.Timestamp.Date}/{ev.Timestamp.Season}/{ev.Timestamp.Year} - {ev.Timestamp.Hour}:{ev.Timestamp.Minutes}");
+                    EditorGUILayout.EndVertical();
+                    GUILayout.Space(5);
+                }
+            }
+            else
+            {
+                GUI.backgroundColor = Color.yellow;
+                EditorGUILayout.HelpBox("No events found for the selected search criteria.", MessageType.Info);
+                GUI.backgroundColor = Color.white;
+            }
+
+            EditorGUILayout.EndScrollView();
         }
 
         private void DrawNewEventInput()
@@ -372,7 +429,16 @@ namespace Slax.Schedule
             EditorGUILayout.LabelField("Timestamp");
             GUILayout.BeginVertical(EditorStyles.helpBox);
             EditorGUI.indentLevel++;
-            newEvent.Timestamp.Day = (Days)EditorGUILayout.EnumPopup("Day", newEvent.Timestamp.Day);
+
+            if (newEvent.Frequency == ScheduleEventFrequency.DAILY)
+            {
+                newEvent.Timestamp.Day = Days.Null;
+            }
+            else
+            {
+                newEvent.Timestamp.Day = (Days)EditorGUILayout.EnumPopup("Day", newEvent.Timestamp.Day);
+            }
+
             newEvent.Timestamp.Date = EditorGUILayout.IntSlider("Date", newEvent.Timestamp.Date, 1, 28);
             newEvent.Timestamp.Hour = EditorGUILayout.IntSlider("Hour", newEvent.Timestamp.Hour, 0, 23);
             newEvent.Timestamp.Minutes = EditorGUILayout.IntSlider("Minutes", newEvent.Timestamp.Minutes, 0, 59);
@@ -383,7 +449,8 @@ namespace Slax.Schedule
 
             EditorGUILayout.Space();
 
-            newEvent.IgnoreEndsAt = EditorGUILayout.Toggle("Ignore End Date", newEvent.IgnoreEndsAt);
+            EditorGUILayout.LabelField("This event has no end date", EditorStyles.boldLabel);
+            newEvent.IgnoreEndsAt = EditorGUILayout.Toggle("", newEvent.IgnoreEndsAt);
 
             if (!newEvent.IgnoreEndsAt)
             {
@@ -403,11 +470,30 @@ namespace Slax.Schedule
 
             EditorGUILayout.Space();
 
-            isAddEventButtonEnabled = !string.IsNullOrEmpty(newEvent.Name) && !string.IsNullOrEmpty(newEvent.ID);
+            bool hasName = !string.IsNullOrEmpty(newEvent.Name);
+            bool isEndDateValid = newEvent.IgnoreEndsAt || newEvent.Timestamp.GetFullDate() <= newEvent.EndsAt.GetFullDate();
+            bool isNotDailyAndHasNoDay = newEvent.Frequency != ScheduleEventFrequency.DAILY && newEvent.Timestamp.Day == Days.Null;
+
+            if (!hasName)
+            {
+                EditorGUILayout.HelpBox("Name cannot be empty.", MessageType.Warning);
+            }
+
+            if (!isEndDateValid)
+            {
+                EditorGUILayout.HelpBox("End Date must be after the Start Date.", MessageType.Warning);
+            }
+
+            if (isNotDailyAndHasNoDay)
+            {
+                EditorGUILayout.HelpBox("Day must be set for non-daily events.", MessageType.Warning);
+            }
+
+            isAddEventButtonEnabled = hasName && !string.IsNullOrEmpty(newEvent.ID) && isEndDateValid && !isNotDailyAndHasNoDay;
 
             GUI.backgroundColor = Color.green;
             GUI.enabled = isAddEventButtonEnabled;
-            if (GUILayout.Button("Add New Event"))
+            if (GUILayout.Button("Create Event"))
             {
                 AddNewEvent();
                 isAddEventButtonEnabled = false;
@@ -457,22 +543,6 @@ namespace Slax.Schedule
             eventsSO.DefaultFilePath = jsonFilePath;
         }
 
-        private void DrawSaveLoadButtons()
-        {
-            EditorGUILayout.Space();
-
-            if (GUILayout.Button("Save"))
-            {
-                eventsSO.SaveEventsToJson(jsonFilePath);
-                AssetDatabase.Refresh();
-            }
-
-            if (GUILayout.Button("Load"))
-            {
-                LoadEventsFromJson();
-            }
-        }
-
         private void LoadEventsFromJson()
         {
             if (System.IO.File.Exists(jsonFilePath))
@@ -495,8 +565,14 @@ namespace Slax.Schedule
         private void DrawSearchBar()
         {
             EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Search by ID:", GUILayout.Width(100));
-            searchId = GUILayout.TextField(searchId);
+            GUILayout.Label("Search by ID or Name:", GUILayout.Width(130));
+            searchId = GUILayout.TextField(searchId).Trim();
+            GUI.backgroundColor = Color.blue;
+            if (GUILayout.Button("Clear", GUILayout.Width(60)))
+            {
+                searchId = "*";
+            }
+            GUI.backgroundColor = Color.white;
             EditorGUILayout.EndHorizontal();
         }
 
@@ -504,10 +580,13 @@ namespace Slax.Schedule
         {
             EditorGUILayout.LabelField("Found Events", EditorStyles.boldLabel);
 
+            // Use the trimmed searchId to check if it's truly empty
+            bool isWildcard = searchId == "*";
+
             for (int i = 0; i < eventsSO.Events.Count; i++)
             {
                 var scheduleEvent = eventsSO.Events[i];
-                bool isMatch = string.IsNullOrEmpty(searchId) || scheduleEvent.ID.Contains(searchId);
+                bool isMatch = isWildcard || scheduleEvent.ID.Contains(searchId) || scheduleEvent.Name.Contains(searchId);
 
                 if (isMatch)
                 {

@@ -4,6 +4,27 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2024-09-01
+### Feat
+- Extended the ScheduleEventsSO to enable plugging in any custom solution for loading and getting events by disabling a boolean toggle to stop using the internal solution.
+- Added helper methods to ScheduleEventsSO
+#### Event Creation
+- Added creation prevention when end date is before start date
+#### Search by timestamp
+- Added option to search using only the day of the week, displaying all events available on that day regardless of date / hour / year / season...
+- Added option to search using only the date
+- Added option to search using only the hour
+- Added option to search using only the Year
+- Added option to search using only the Season
+- Added combined search to enable searching with (for example) only Day & Season or only Hour & Year, any number of combinations
+- Added search between 2 timestamps
+#### Sample content
+- Added example script to setup and fire the TimeManager in the demo scene
+### Fix
+- Fixed a display issue in which the eye icon functionality was reverted
+### Style
+- Enhanced the style of the custom editors (a little)
+
 ## [0.4.3] - 2023-08-18
 ### Feat
 - Added current day ratio calculation

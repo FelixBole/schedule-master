@@ -35,6 +35,26 @@ namespace Slax.Schedule
         /// <summary>Returns the full date, year included</summary>
         public int GetFullDate() => ((Year) * 525600) + (((int)Season) * 44640) + (Date * 1440);
 
+        /// <summary>
+        /// Checks if the timestamp is between two other timestamps
+        /// </summary>
+        public bool IsBetween(Timestamp start, Timestamp end)
+        {
+            // Convert timestamps to comparable values like ticks or a custom comparison logic
+            // Here we use a simple comparison logic based on their numeric fields
+            if (Year < start.Year || Year > end.Year) return false;
+            if (Year == start.Year && Season < start.Season) return false;
+            if (Year == end.Year && Season > end.Season) return false;
+
+            if (Year == start.Year && Season == start.Season && Date < start.Date) return false;
+            if (Year == end.Year && Season == end.Season && Date > end.Date) return false;
+
+            if (Year == start.Year && Season == start.Season && Date == start.Date && Hour < start.Hour) return false;
+            if (Year == end.Year && Season == end.Season && Date == end.Date && Hour > end.Hour) return false;
+
+            return true;
+        }
+
         public override int GetHashCode()
         {
             unchecked // Overflow is fine, just wrap around
