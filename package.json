@@ -1,6 +1,6 @@
 {
 	"name": "com.slax.schedulemaster",
-	"version": "0.4.3",
+	"version": "0.5.0",
 	"displayName": "Schedule Master",
 	"description": "A Time Manager & Schedule Event Manager",
 	"unity": "2021.3",
