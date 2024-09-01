@@ -17,6 +17,7 @@ namespace Slax.Schedule
         public List<PassedCheck> RunChecks(List<ScheduleEvent> events)
         {
             List<PassedCheck> passed = new List<PassedCheck>();
+
             foreach (var ev in events)
             {
                 PassedCheck current = new PassedCheck(ev, false);
@@ -29,20 +30,37 @@ namespace Slax.Schedule
                     continue;
                 }
 
+                bool passes = association.Logic == ScheduleEventCheckerAssociation.ScheduleEventCheckerLogic.AND;
+
                 foreach (ScheduleEventCheckBase checker in association.Checkers)
                 {
-                    if (!checker.CheckEvent(ev))
+                    if (association.Logic == ScheduleEventCheckerAssociation.ScheduleEventCheckerLogic.AND)
                     {
-                        current.Passed = false;
-                        break;
+                        // AND logic: All checkers must pass for the event to pass
+                        if (!checker.CheckEvent(ev))
+                        {
+                            passes = false;
+                            break;
+                        }
+                    }
+                    else if (association.Logic == ScheduleEventCheckerAssociation.ScheduleEventCheckerLogic.OR)
+                    {
+                        // OR logic: At least one checker must pass for the event to pass
+                        if (checker.CheckEvent(ev))
+                        {
+                            passes = true;
+                            break;
+                        }
                     }
                 }
 
-                current.Passed = true;
+                current.Passed = passes;
                 passed.Add(current);
             }
+
             return passed;
         }
+
 
         /// <summary>
         /// Runs checks if any exists on the passed in list of events
@@ -62,20 +80,33 @@ namespace Slax.Schedule
                     continue;
                 }
 
-                bool passes = true;
+                bool passes = association.Logic == ScheduleEventCheckerAssociation.ScheduleEventCheckerLogic.AND;
 
                 foreach (ScheduleEventCheckBase checker in association.Checkers)
                 {
-                    if (!checker.CheckEvent(ev))
+                    if (association.Logic == ScheduleEventCheckerAssociation.ScheduleEventCheckerLogic.AND)
                     {
-                        passes = false;
-                        break;
+                        // AND logic: All checkers must pass for the event to pass
+                        if (!checker.CheckEvent(ev))
+                        {
+                            passes = false;
+                            break;
+                        }
+                    }
+                    else if (association.Logic == ScheduleEventCheckerAssociation.ScheduleEventCheckerLogic.OR)
+                    {
+                        // OR logic: At least one checker must pass for the event to pass
+                        if (checker.CheckEvent(ev))
+                        {
+                            passes = true;
+                            break;
+                        }
                     }
                 }
 
                 if (passes) passed.Add(ev);
             }
-            
+
             return passed;
         }
     }
@@ -83,6 +114,8 @@ namespace Slax.Schedule
     [System.Serializable]
     public class ScheduleEventCheckerAssociation
     {
+        public enum ScheduleEventCheckerLogic { AND, OR }
+        public ScheduleEventCheckerLogic Logic = ScheduleEventCheckerLogic.OR;
         public ScheduleEvent Event;
         public List<ScheduleEventCheckBase> Checkers = new List<ScheduleEventCheckBase>();
     }

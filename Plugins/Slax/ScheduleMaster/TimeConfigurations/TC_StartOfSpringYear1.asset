@@ -27,4 +27,4 @@ MonoBehaviour:
     AfternoonStartHour: 12
     NightStartHour: 19
   _tickMinutesIncrease: 10
-  _timeBetweenTicks: 1
+  _timeBetweenTicks: 0.7

@@ -27,8 +27,6 @@ namespace Slax.Schedule
 
         public override bool CheckEvent(ScheduleEvent scheduleEvent)
         {
-            bool result = _currentDay == Day;
-            Debug.Log($"Ran check on {scheduleEvent.Name} and status is : {result}");
             return _currentDay == Day;
         }
     }

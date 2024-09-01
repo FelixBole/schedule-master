@@ -280,10 +280,15 @@ namespace Slax.Schedule
             GUILayout.Label("Creating associations for event", EditorStyles.boldLabel);
             Label($"{_associationInCreation.Event.Name}");
             Label($"(ID: {_associationInCreation.Event.ID})");
+
+            // Logic selection
+            _associationInCreation.Logic = (ScheduleEventCheckerAssociation.ScheduleEventCheckerLogic)
+                EditorGUILayout.EnumPopup("Logic", _associationInCreation.Logic);
+
             BV(true);
             GUILayout.Label("Assign a Checker Script", EditorStyles.boldLabel);
 
-            _currentCheckInCreation = (ScheduleEventCheckBase)EditorGUILayout.ObjectField("Event Checker", _currentCheckInCreation as ScheduleEventCheckBase, typeof(ScheduleEventCheckBase), false);
+            _currentCheckInCreation = (ScheduleEventCheckBase)EditorGUILayout.ObjectField("Event Checker", _currentCheckInCreation, typeof(ScheduleEventCheckBase), false);
 
             EV();
 
@@ -333,29 +338,29 @@ namespace Slax.Schedule
                 GUI.backgroundColor = Color.white;
                 EV();
                 Space();
-
-                GUI.backgroundColor = Color.green;
-                if (GUILayout.Button("Save"))
-                {
-                    if (_associationInCreation.Checkers == null)
-                    {
-                        _associationInCreation.Checkers = new List<ScheduleEventCheckBase>();
-                    }
-
-                    _associationInCreation.Checkers.AddRange(_checkersInCreation);
-
-                    if (!_target.Associations.Contains(_associationInCreation))
-                    {
-                        _target.Associations.Add(_associationInCreation);
-                    }
-
-                    _associationInCreation = null;
-                    _currentCheckInCreation = null;
-                    _checkersInCreation = new List<ScheduleEventCheckBase>();
-                    _attemptedToAssociateExisting = false;
-                }
-                GUI.backgroundColor = Color.white;
             }
+
+            GUI.backgroundColor = Color.green;
+            if (GUILayout.Button("Save"))
+            {
+                if (_associationInCreation.Checkers == null)
+                {
+                    _associationInCreation.Checkers = new List<ScheduleEventCheckBase>();
+                }
+
+                _associationInCreation.Checkers.AddRange(_checkersInCreation);
+
+                if (!_target.Associations.Contains(_associationInCreation))
+                {
+                    _target.Associations.Add(_associationInCreation);
+                }
+
+                _associationInCreation = null;
+                _currentCheckInCreation = null;
+                _checkersInCreation = new List<ScheduleEventCheckBase>();
+                _attemptedToAssociateExisting = false;
+            }
+            GUI.backgroundColor = Color.white;
         }
 
         private void DrawBrowseContent()
@@ -492,9 +497,12 @@ namespace Slax.Schedule
 
                 if (_associationInCreation == null)
                 {
-                    _associationInCreation = new ScheduleEventCheckerAssociation();
-                    _associationInCreation.Event = ev;
-                    _associationInCreation.Checkers = new List<ScheduleEventCheckBase>();
+                    _associationInCreation = new ScheduleEventCheckerAssociation
+                    {
+                        Logic = ScheduleEventCheckerAssociation.ScheduleEventCheckerLogic.OR,
+                        Event = ev,
+                        Checkers = new List<ScheduleEventCheckBase>()
+                    };
                     _target.Associations.Add(_associationInCreation);
                 }
             }
